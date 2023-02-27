@@ -11,34 +11,5 @@ Your contributions and suggestions are heartily♥ welcome. Please check the [Co
 
 * [install](#install)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## install
+to install and 
