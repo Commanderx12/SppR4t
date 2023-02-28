@@ -30,4 +30,4 @@ To install and use SppR4t you need to download file 'SppR4t.py' and run it.
 
 ## Advices
 * If you want to disable loading(i don't recommend) you need to change 'loading' variable value, if it = '1' loading enabled and if it = '0' disabled.
-* DO NOT change or delete this code: <br> if main == pass1*pass2: <br> exit() <br> else: <br> logo() <br> and DO NOT change or delete 'rand' 'for' cycle
+* DO NOT change or delete this code: <br> if main == pass1*pass2: <br> exit() <br> else: <br> logo() <br> and DO NOT change or delete `for` cycle with name 'rand'
