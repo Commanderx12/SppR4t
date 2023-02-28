@@ -2,7 +2,7 @@
 > Is open-source pentesting tool based on python programming language.
 
 right now SppR4t is in developing and it's a pre-alpha version of this tool.
-Please if you found any errors tell about them in [project discord](google.com).
+Please if you found any errors tell about them in [project discord](https://discord.gg/mqpv4MSZ2m).
 
 [Penetration testing](https://en.wikipedia.org/wiki/Penetration_test) is the practice of launching authorized, simulated attacks against computer systems and their physical infrastructure to expose potential security weaknesses and vulnerabilities. Should you discover a vulnerability, please follow [this guidance](https://kb.cert.org/vuls/guidance/) to report it responsibly.
 
