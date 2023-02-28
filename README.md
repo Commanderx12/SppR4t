@@ -1,5 +1,5 @@
 # SppR4t
-> it's pentesting tool based on python programming language.
+> is open-source pentesting tool based on python programming language.
 
 right now SppR4t is in developing and it's a pre-alpha version of this tool.
 
@@ -12,4 +12,7 @@ Your contributions and suggestions are heartily♥ welcome. Please check the [Co
 * [install](#install)
 
 ## install
-to install and 
+to install and use SppR4t you need to download file 'SppR4t.py' and run it.
+<div>if after loading you see this:<div>
+
+![alt text](https://pbs.twimg.com/profile_images/1498641868397191170/6qW2XkuI_400x400.png)
