@@ -2,7 +2,7 @@
 > Is open-source pentesting tool based on python programming language.
 
 right now SppR4t is in developing and it's a pre-alpha version of this tool.
-Please if you found any errors or want to recommend something tell about this in [project discord](https://discord.gg/mqpv4MSZ2m).
+Please if you found any errors or want to recommend something tell about this in [project discord](https://discord.gg/SP3zE8Y5nv).
 
 [Penetration testing](https://en.wikipedia.org/wiki/Penetration_test) is the practice of launching authorized, simulated attacks against computer systems and their physical infrastructure to expose potential security weaknesses and vulnerabilities. Should you discover a vulnerability, please follow [this guidance](https://kb.cert.org/vuls/guidance/) to report it responsibly.
 
@@ -26,7 +26,7 @@ To install and use SppR4t you need to download file 'SppR4t.py' and run it.
 <div>it means all working good<div>
 
 ## Tools
-* ip-by-domain
+* getip (ip by domain)
 
 ## Advices
 * If you want to disable loading(i don't recommend) you need to change 'loading' variable value, if it = '1' loading enabled and if it = '0' disabled.
