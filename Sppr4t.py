@@ -5,7 +5,7 @@ import time
 import socket
 from time import sleep
 
-loading = int(0)
+loading = int(1)
 
 for loading in range(loading):
     rand2 = ["0.1", "0.3", "0.6", "0.2"]
