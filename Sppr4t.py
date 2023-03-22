@@ -29,6 +29,7 @@ for loading in range(loading):
         sys.stdout.flush()
         sleep(0.08)
 
+
 def logo():
     respone = os.system("clear")
     print("  .                                                                       .      ")
@@ -57,13 +58,14 @@ def logo():
     print("\n")
     mainfunc()
 
-
 def mainfunc():
     for rand in range(1):
         rand = ["1", "2", "3", "4", "5", "6", "7", "8",
                 "9", "10", "11", "12", "13", "14", "15", "16"]
         alph = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
                 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        secs = ['1.2', '0.7', '1', '0.4', '1.5']
+        r_secs = float(random.choice(secs))
         pass1 = (random.choice(alph))
         pass2 = int(random.choice(rand))
     main = input("SppR>")
@@ -81,11 +83,14 @@ def mainfunc():
         mainfunc()
 
     if main == "getip":
-        domain = input("domain:")
+        domain = input("domain(example.com):")
         output_ip = socket.gethostbyname(domain)
-        print("starting getip scan on " + domain + "...")
-        time.sleep(0.5)
-        print("scan complete, result:")
+        print("starting getip on " + domain + "...")
+        time.sleep(r_secs)
+        print("scan complete in", end=" ")
+        print(r_secs, end=" ")
+        print(" seconds, result:")
+        print("domain: " + domain + "\n" + "ip: " + output_ip)
         mainfunc()
 
     if main == "time":
