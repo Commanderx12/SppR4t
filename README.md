@@ -12,12 +12,7 @@ SppR4t is a pre-alpha command-line utility written in Python that provides vario
 
 ## Features
 
-- Get the IP address of a domain (example.com).
-- Clear the console screen and display the program's banner.
-- Show the current time and year.
-- Display the current version of the program.
-- Show a list of available commands.
-- Exit the program.
+- getip.
 
 ## Installation
 
