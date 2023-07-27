@@ -1,6 +1,6 @@
 # SppR4t
 
-SppR4t is a pre-alpha command-line utility written in Python that provides various functionalities. It includes features like getting the IP address of a domain, displaying the current time and year, and more.
+SppR4t is a pentesting tool written in Python.
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@ SppR4t is a pre-alpha command-line utility written in Python that provides vario
 
 ## Features
 
-- getip.
+- get ip of domain.
 
 ## Installation
 
