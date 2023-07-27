@@ -1,6 +1,3 @@
-Sure, here's the updated README.md without the license section:
-
-```markdown
 # SppR4t
 
 SppR4t is a pre-alpha command-line utility written in Python that provides various functionalities. It includes features like getting the IP address of a domain, displaying the current time and year, and more.
@@ -26,7 +23,7 @@ SppR4t is a pre-alpha command-line utility written in Python that provides vario
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/SppR4t.git
+   git clone https://github.com/v1xohay/SppR4t.git
    cd SppR4t
    ```
 
@@ -40,7 +37,7 @@ SppR4t is a pre-alpha command-line utility written in Python that provides vario
 
 3. Run the following command to start the program:
    ```bash
-   python sppr.py
+   python SppR4t.py
    ```
 
 ## Commands
@@ -74,6 +71,3 @@ Contributions are welcome! If you find a bug or want to add new features, feel f
    ```
 
 5. Open a pull request.
-```
-
-Make sure to replace "your-username" in the installation instructions with your actual GitHub username.
