@@ -1,33 +1,79 @@
+Sure, here's the updated README.md without the license section:
+
+```markdown
 # SppR4t
-> Is open-source pentesting tool based on python programming language.
 
-right now SppR4t is in developing and it's a pre-alpha version of this tool.
-Please if you found any errors or want to recommend something tell about this in [project discord](https://discord.gg/SP3zE8Y5nv).
+SppR4t is a pre-alpha command-line utility written in Python that provides various functionalities. It includes features like getting the IP address of a domain, displaying the current time and year, and more.
 
-[Penetration testing](https://en.wikipedia.org/wiki/Penetration_test) is the practice of launching authorized, simulated attacks against computer systems and their physical infrastructure to expose potential security weaknesses and vulnerabilities. Should you discover a vulnerability, please follow [this guidance](https://kb.cert.org/vuls/guidance/) to report it responsibly.
+## Table of Contents
 
-Your contributions and suggestions are heartily♥ welcome. Please check the [Contributing Guidelines](CONTRIBUTING.md) for more details. This work is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Contributing](#contributing)
 
-## Contents
-* [Warning](#warning)
-* [Install](#install)
-* [Tools](#tools)
-* [Advices](#advices)
+## Features
 
-## Warning
-### !this tool created for linux if you use it on windows or some other OS it may not work!
+- Get the IP address of a domain (example.com).
+- Clear the console screen and display the program's banner.
+- Show the current time and year.
+- Display the current version of the program.
+- Show a list of available commands.
+- Exit the program.
 
-## Install
-To install and use SppR4t you need to download file 'SppR4t.py' and run it.
-<div>If after loading you see this:<div>
+## Installation
 
-![sorry image not loaded](https://i.ibb.co/F0Sdjp3/2023-02-28-163743.png)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/SppR4t.git
+   cd SppR4t
+   ```
 
-<div>it means all working good<div>
+2. Make sure you have Python 3.x installed.
 
-## Tools
-* getip (ip by domain)
+## Usage
 
-## Advices
-* If you want to disable loading(i don't recommend) you need to change 'loading' variable value, if it = '1' loading enabled and if it = '0' disabled.
-* DO NOT change or delete this code: <br> `if main == pass1*pass2:` <br> `exit()` <br> `else:` <br> `logo()` <br> and DO NOT change or delete `for` cycle with name 'rand'
+1. Open a terminal or command prompt.
+
+2. Navigate to the `SppR4t` directory.
+
+3. Run the following command to start the program:
+   ```bash
+   python sppr.py
+   ```
+
+## Commands
+
+- `getip`: Get the IP address of a domain (example.com).
+- `banner / clear`: Clear the console screen and display the program's banner.
+- `time`: Show the current time and year.
+- `ver`: Display the current version of the program.
+- `help`: Show a list of available commands.
+- `exit`: Exit the program.
+
+## Contributing
+
+Contributions are welcome! If you find a bug or want to add new features, feel free to open an issue or submit a pull request.
+
+1. Fork the repository.
+
+2. Create your feature branch:
+   ```bash
+   git checkout -b feature/new-feature
+   ```
+
+3. Commit your changes:
+   ```bash
+   git commit -m "Add new feature"
+   ```
+
+4. Push to the branch:
+   ```bash
+   git push origin feature/new-feature
+   ```
+
+5. Open a pull request.
+```
+
+Make sure to replace "your-username" in the installation instructions with your actual GitHub username.
