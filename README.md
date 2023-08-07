@@ -13,6 +13,7 @@ SppR4t is a pentesting tool written in Python.
 ## Features
 
 - get ip of domain.
+- scan open ports on IP address
 
 ## Installation
 
