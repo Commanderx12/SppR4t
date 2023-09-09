@@ -4,11 +4,12 @@ import sys
 import time
 import socket
 import datetime
-import os
-import math
 import threading
-import sqlite3
-
+import requests
+import psycopg2
+import click
+from decouple import config
+import traceback
 
 scan_results = {
     "getip": [],
@@ -23,27 +24,20 @@ def clear_screen():
 
 rand2=['0.1','0.3','0.6','0.2']
 for loading in range(0):
-	j=float(random.choice(rand2));sys.stdout.write('\r');a=float(random.choice(rand2))
-	if loading>10:a=0
-	if loading>29:a=j
-	if loading>33:a=0
-	if loading>60:a=j
-	if loading>68:a=0
-	time.sleep(a);sys.stdout.write('loading SppR console [%-10s] %d%%'%('='*loading,loading));sys.stdout.flush();time.sleep(.08)
+    j = float(random.choice(rand2))
+    click.echo('\r', nl=False)
+    a = float(random.choice(rand2))
+    if loading>10:a=0
+    if loading>29:a=j
+    if loading>33:a=0
+    if loading>60:a=j
+    if loading>68:a=0
+    time.sleep(a)
+    click.echo('loading SppR console [%-10s] %d%%' % ('=' * loading, loading), nl=False)
+    click.echo('', nl=True)
+    time.sleep(0.08)
 
 report_counter = 1
-def save_scan_result(scan_type, result):
-    conn = sqlite3.connect('scan_results.db')
-    cursor = conn.cursor()
-
-    # Создание таблицы, если она не существует
-    cursor.execute('CREATE TABLE IF NOT EXISTS scan_results (id INTEGER PRIMARY KEY AUTOINCREMENT, scan_type TEXT, result TEXT, timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
-
-    # Вставка данных сканирования
-    cursor.execute('INSERT INTO scan_results (scan_type, result) VALUES (?, ?)', (scan_type, result))
-
-    conn.commit()
-    conn.close()
 
 def generate_report():
     global report_counter
@@ -81,7 +75,6 @@ def generate_report():
     print(f"Scan report has been saved to {report_filename}")
     report_counter += 1
 
-
 def logo():
     clear_screen()
     with open('ASCII.txt', 'r') as file:
@@ -111,34 +104,68 @@ def port_scan_worker(target_ip, start_time):
         end_time = datetime.datetime.now()
         elapsed_time = end_time - start_time
 
-        result_text = f"Scan complete in {elapsed_time.total_seconds():.2f} seconds, result:"
-        result_text += f"\nTarget IP: {target_ip}"
-        if open_ports:
-            result_text += f"\nOpen Ports: {', '.join(map(str, open_ports))}"
-        else:
-            result_text += "\nNo open ports found."
-
-        print(result_text)
-
         scan_results["portscan"].append({
             "target_ip": target_ip,
             "open_ports": open_ports,
             "scan_time": elapsed_time.total_seconds(),
             "timestamp": end_time.strftime('%Y-%m-%d %H:%M:%S'),
         })
-        
-        save_scan_result('portscan', result_text)
+
+        save_scan_results_to_db()
 
     except socket.gaierror:
-        print("Error: Could not resolve the target IP address. Please check if the IP is valid.")
+        print("Ошибка: Не удалось определить IP-адрес цели. Пожалуйста, проверьте правильность IP.")
     except Exception as e:
-        print("An error occurred:", str(e))
+        print("Произошла ошибка:", str(e))
+
+def save_scan_results_to_db():
+    with open('port.txt', 'r') as file:
+        # Читаем содержимое файла
+        file_contents = file.read()
+    try:
+        port = int(file_contents)  # Преобразуем порт в целое число
+        connection = psycopg2.connect(
+            host=config('host'),
+            port=port,
+            user=config('user'),
+            password=config('password'),
+            database=config('database')
+        )
+
+        cursor = connection.cursor()
+
+        # Вставка данных сканирования IP
+        for result in scan_results["getip"]:
+            query = "INSERT INTO getip_scan_results (domain, ip, scan_time, timestamp) VALUES (%s, %s, %s, %s);"
+            data = (result["domain"], result["ip"], result["scan_time"], result["timestamp"])
+            cursor.execute(query, data)
+
+        # Вставка данных сканирования портов
+        for result in scan_results["portscan"]:
+            query = "INSERT INTO portscan_scan_results (target_ip, open_ports, scan_time, timestamp) VALUES (%s, %s, %s, %s);"
+            data = (result["target_ip"], result["open_ports"], result["scan_time"], result["timestamp"])
+            cursor.execute(query, data)
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+    except psycopg2.Error as e:
+        print("Ошибка при сохранении данных в базу данных:", e)
+        if 'query' in locals():
+            print("Строка запроса:", query)
+        if 'data' in locals():
+            print("Данные:", data)
+        raise  # Перевыбрасываем исключение, чтобы получить полный стек вызовов
+
+    except Exception as e:
+        print("Произошла ошибка при сохранении данных в базу данных:", str(e))
+
+
 
 def mainfunc():
     alph = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    secs = ['1.2', '0.7', '1', '0.4', '1.5']
-    r_secs = float(random.choice(secs))
     pass1 = (random.choice(alph))
     pass2 = int(random.choice(range(1, 17)))
 
@@ -180,7 +207,7 @@ def mainfunc():
 
     if main == "banner":
         logo()
-    
+
     if main == "clear":
         clear_screen()
 
@@ -189,7 +216,7 @@ def mainfunc():
 
     if main == pass1 * pass2:
         exit()
-        
+
     if main == "getip":
         domain = input("Enter the domain (example.com): ")
         try:
@@ -208,14 +235,14 @@ def mainfunc():
                 "timestamp": end_time.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
-            save_scan_result('getip', f"Domain: {domain}\nIP: {output_ip}\nTime: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            save_scan_results_to_db()
 
         except socket.gaierror:
             print("Error: Could not resolve the domain name. Please check if the domain is valid.")
             mainfunc()
         except Exception as e:
-            print("An error occurred:", str(e))
-            mainfunc()
+            traceback.print_exc()  # Это выведет трассировку стека и поможет определить ошибку\
+            mainfunc
         mainfunc()
 
     if main == "portscan":
