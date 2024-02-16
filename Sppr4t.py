@@ -6,14 +6,13 @@ import socket
 import datetime
 import threading
 import requests
-import psycopg2
 import click
-from decouple import config
 import traceback
 
 scan_results = {
     "getip": [],
     "portscan": [],
+    "IPL": [],
 }
 
 def clear_screen():
@@ -27,11 +26,16 @@ for loading in range(0):
     j = float(random.choice(rand2))
     click.echo('\r', nl=False)
     a = float(random.choice(rand2))
-    if loading>10:a=0
-    if loading>29:a=j
-    if loading>33:a=0
-    if loading>60:a=j
-    if loading>68:a=0
+    if loading > 10:
+        a = 0
+    if loading > 29:
+        a = j
+    if loading > 33:
+        a = 0
+    if loading > 60:
+        a = j
+    if loading > 68:
+        a = 0
     time.sleep(a)
     click.echo('loading SppR console [%-10s] %d%%' % ('=' * loading, loading), nl=False)
     click.echo('', nl=True)
@@ -39,45 +43,9 @@ for loading in range(0):
 
 report_counter = 1
 
-def generate_report():
-    global report_counter
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    report_filename = f"report_{timestamp}_{report_counter}.txt"
-
-    with open(report_filename, "w") as report_file:
-        report_file.write("**** Scan Report ****\n")
-
-        report_file.write("\n--- getip Scan Results ---\n")
-        if scan_results["getip"]:
-            for index, result in enumerate(scan_results["getip"], 1):
-                report_file.write(f"Domain: {result['domain']}\nIP: {result['ip']}\nScan Time: {result['scan_time']:.1f} seconds\n")
-                report_file.write(f"Timestamp: {result['timestamp']}\n")
-                if index < len(scan_results["getip"]):
-                    report_file.write("-------------------\n")
-        else:
-            report_file.write("No getip scans have been performed.\n\n")
-
-        report_file.write("\n--- Port Scan Results ---\n")
-        if scan_results["portscan"]:
-            for index, result in enumerate(scan_results["portscan"], 1):
-                report_file.write(f"Target IP: {result['target_ip']}\n")
-                if result['open_ports']:
-                    report_file.write(f"Open Ports: {', '.join(map(str, result['open_ports']))}\n")
-                else:
-                    report_file.write("No open ports found.\n")
-                report_file.write(f"Scan Time: {result['scan_time']:.1f} seconds\n")
-                report_file.write(f"Timestamp: {result['timestamp']}\n")
-                if index < len(scan_results["portscan"]):
-                    report_file.write("-------------------\n")
-        else:
-            report_file.write("No port scans have been performed.\n\n")
-
-    print(f"Scan report has been saved to {report_filename}")
-    report_counter += 1
-
 def logo():
     clear_screen()
-    with open('ASCII.txt', 'r') as file:
+    with open('ASCII.txt', 'r', encoding='UTF8') as file:
         ascii_art = file.read()
     print(ascii_art)
 
@@ -111,57 +79,10 @@ def port_scan_worker(target_ip, start_time):
             "timestamp": end_time.strftime('%Y-%m-%d %H:%M:%S'),
         })
 
-        save_scan_results_to_db()
-
     except socket.gaierror:
         print("Ошибка: Не удалось определить IP-адрес цели. Пожалуйста, проверьте правильность IP.")
     except Exception as e:
         print("Произошла ошибка:", str(e))
-
-def save_scan_results_to_db():
-    with open('port.txt', 'r') as file:
-        # Читаем содержимое файла
-        file_contents = file.read()
-    try:
-        port = int(file_contents)  # Преобразуем порт в целое число
-        connection = psycopg2.connect(
-            host=config('host'),
-            port=port,
-            user=config('user'),
-            password=config('password'),
-            database=config('database')
-        )
-
-        cursor = connection.cursor()
-
-        # Вставка данных сканирования IP
-        for result in scan_results["getip"]:
-            query = "INSERT INTO getip_scan_results (domain, ip, scan_time, timestamp) VALUES (%s, %s, %s, %s);"
-            data = (result["domain"], result["ip"], result["scan_time"], result["timestamp"])
-            cursor.execute(query, data)
-
-        # Вставка данных сканирования портов
-        for result in scan_results["portscan"]:
-            query = "INSERT INTO portscan_scan_results (target_ip, open_ports, scan_time, timestamp) VALUES (%s, %s, %s, %s);"
-            data = (result["target_ip"], result["open_ports"], result["scan_time"], result["timestamp"])
-            cursor.execute(query, data)
-
-        connection.commit()
-        cursor.close()
-        connection.close()
-
-    except psycopg2.Error as e:
-        print("Ошибка при сохранении данных в базу данных:", e)
-        if 'query' in locals():
-            print("Строка запроса:", query)
-        if 'data' in locals():
-            print("Данные:", data)
-        raise  # Перевыбрасываем исключение, чтобы получить полный стек вызовов
-
-    except Exception as e:
-        print("Произошла ошибка при сохранении данных в базу данных:", str(e))
-
-
 
 def mainfunc():
     alph = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -177,8 +98,8 @@ def mainfunc():
         "ver": "Display the current version of the program.",
         "help": "Show a list of available commands.",
         "exit": "Exit the program.",
-        "report": "Generate and save a scan report.",
         "portscan": "Scan open ports on a target IP address.",
+        "IPL": "Get geolocation by IP",
     }
 
     main = input("SppR>")
@@ -201,15 +122,11 @@ def mainfunc():
         print("year:", cur_year)
         mainfunc()
 
-    if main == "report":
-        generate_report()
-        mainfunc()
-
     if main == "banner":
         logo()
 
     if main == "clear":
-        clear_screen()
+        logo()
 
     if main == "exit":
         exit()
@@ -226,16 +143,8 @@ def mainfunc():
             end_time = datetime.datetime.now()
             elapsed_time = end_time - start_time
             print(f"Scan complete in {elapsed_time.total_seconds():.2f} seconds, result:")
-            print(f"Domain: {domain}\nIP: {output_ip}\nTime: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
-
-            scan_results["getip"].append({
-                "domain": domain,
-                "ip": output_ip,
-                "scan_time": round(elapsed_time.total_seconds(), 2),
-                "timestamp": end_time.strftime('%Y-%m-%d %H:%M:%S'),
-            })
-
-            save_scan_results_to_db()
+            print(f"Domain: {domain}\nIP: {output_ip}\n")
+            print(f"Time: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
         except socket.gaierror:
             print("Error: Could not resolve the domain name. Please check if the domain is valid.")
@@ -258,6 +167,28 @@ def mainfunc():
 
         except Exception as e:
             print("An error occurred:", str(e))
+
+    if main == "IPL":
+        ip = input("Enter an IP address: ")
+
+        try:
+            response = requests.get(f"https://ipinfo.io/{ip}/json")
+            data = response.json()
+
+            if "city" in data and "region" in data and "country" in data:
+                city = data["city"]
+                region = data["region"]
+                country = data["country"]
+
+                result = f"City: {city}, \nRegion: {region}, \nCountry: {country}"
+            else:
+                result = "Location data not available."
+
+        except requests.exceptions.RequestException as e:
+            result = f"Error: {e}"
+
+        print(result)
+
 
     else:
         print("\033[1;31mInvalid command. Type 'help' for a list of commands.\033[0m")
